@@ -132,7 +132,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
   border-radius:7px;padding:4px 11px}
 
 /* ===== TEAM ===== */
-.team-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;width:min(900px,88vw)}
+.team-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;width:min(900px,88vw);transform:translateY(-34px)}
 .tcard{background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:18px;
   padding:22px;position:relative;overflow:hidden;opacity:0;transform:translateY(24px) scale(.96);
   transition:.5s cubic-bezier(.2,1.1,.3,1)}
@@ -607,7 +607,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .sol-stat .v{font-family:'JetBrains Mono',monospace;font-weight:900;font-size:1.02rem;color:var(--amber)}
 .sol-stat.green .v{color:var(--green)} .sol-stat.cyan .v{color:var(--cyan)}
 .sol-stat .l{font-size:.5rem;letter-spacing:1px;color:var(--muted);font-weight:700;margin-top:2px}
-.sol-grid-badge{position:absolute;left:20px;top:32%;z-index:6;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.5);
+.sol-grid-badge{position:absolute;left:20px;top:10%;z-index:6;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.5);
   border-radius:14px;padding:12px 16px;backdrop-filter:blur(8px);max-width:196px;box-shadow:0 16px 36px rgba(0,0,0,.4)}
 .sol-grid-badge .t{font-size:.76rem;font-weight:900;color:var(--red);display:flex;align-items:center;gap:7px}
 .sol-grid-badge .s{font-size:.58rem;color:var(--muted);margin-top:5px;line-height:1.5}
@@ -618,7 +618,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .sol-vignette{position:absolute;inset:0;z-index:5;pointer-events:none;box-shadow:inset 0 0 230px rgba(5,8,15,.7)}
 
 /* ===== DASHBOARD ===== */
-.dash{width:min(940px,92vw);display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:minmax(70px,auto);gap:12px}
+.dash{width:min(940px,92vw);display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:minmax(70px,auto);gap:12px;transform:translateY(-92px)}
 .dpanel{background:var(--glass);backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:14px;padding:14px}
 .dpanel .dt{font-size:.6rem;letter-spacing:1.5px;color:var(--muted);font-weight:800;margin-bottom:8px}
 .dpanel .dv{font-size:1.5rem;font-weight:900;font-family:'JetBrains Mono',monospace}
@@ -770,7 +770,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .scn-spec{display:flex;flex-direction:column;gap:8px}
 .scn-spec span{font-family:'JetBrains Mono',monospace;font-size:.78rem;background:var(--card2);border:1px solid var(--line);
   padding:7px 13px;border-radius:9px;color:var(--cyan)}
-.towers{display:flex;gap:40px;justify-content:center;align-items:flex-end;height:300px;margin-top:10px}
+.towers{display:flex;gap:40px;justify-content:center;align-items:flex-end;height:300px;margin-top:10px;transform:translateY(-58px) scale(.82);transform-origin:top center}
 .tower{width:240px;display:flex;flex-direction:column-reverse;gap:3px}
 .tower .seg{border-radius:5px;padding:7px 11px;display:flex;justify-content:space-between;align-items:center;
   font-size:.7rem;transform-origin:bottom;animation:growSeg .5s backwards}
@@ -811,16 +811,12 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 
 /* cinematic, eye-comfortable slide transition (deep navy veil + cyan light sweep) */
 .flash{position:absolute;inset:0;z-index:30;opacity:0;pointer-events:none;
-  background:
-    linear-gradient(100deg, transparent 36%, rgba(34,211,238,.30) 49%, rgba(139,92,246,.18) 51%, transparent 64%),
-    radial-gradient(ellipse at 50% 50%, rgba(15,26,46,.94), rgba(6,9,16,.98));
-  background-size:320% 100%, 100% 100%; background-position:130% 0, 0 0}
-.flash.go{animation:xtrans .72s cubic-bezier(.55,0,.25,1)}
+  background:radial-gradient(ellipse at 50% 48%, rgba(34,211,238,.05), rgba(8,12,22,.5) 72%)}
+.flash.go{animation:xtrans .6s ease-in-out}
 @keyframes xtrans{
-  0%{opacity:0;background-position:130% 0,0 0}
-  26%{opacity:1}
-  60%{opacity:.9}
-  100%{opacity:0;background-position:-50% 0,0 0}
+  0%{opacity:0}
+  45%{opacity:.5}
+  100%{opacity:0}
 }
 </style>
 </head>
@@ -835,7 +831,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
       <div class="nurai-chip"><img src="logos/nurAI-logo.png" alt="NURAI"><span class="lab">NURAI<br>2026</span></div>
     </div>
     <div class="hud-tr">
-      <div class="wordmark"><span class="lock"><svg viewBox="0 0 24 24" fill="none"><rect x="5" y="10" width="14" height="10" rx="2" fill="#04121a"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="#04121a" stroke-width="2"/></svg></span><span>secur</span><span class="ai">AI</span></div>
+      <div class="wordmark"><span class="lock"><svg viewBox="0 0 24 24" fill="none"><rect x="5" y="10" width="14" height="10" rx="2" fill="#04121a"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="#04121a" stroke-width="2"/></svg></span><span class="wm">secur<span class="ai">AI</span></span></div>
       <div class="solar-gauge"><span class="sun">☀</span><div class="bar"><i id="solarBar" style="width:94%"></i></div><span class="pct" id="solarPct">94%</span></div>
     </div>
     <div class="uob-wm"><img src="logos/uniLogo.png" alt="University of Baghdad"></div>
@@ -917,7 +913,7 @@ function actFor(i){ return ACTS.find(a=>i>=a.from&&i<=a.to); }
 
 // Per-step popup anchor — curated so the card never overlaps that scene's content.
 // Indexed by step number (0 idle & 26 endcard have no card).
-const POPUP_POS=[null,'bc','tc','cr','bc','tc','br','bl','br','bl','br','bl','bc','tc','bc','tc','bc','tc','tr','tc','bc','tc','bl','tc','bc','tc',null];
+const POPUP_POS=[null,'bc','tc','cr','bc','tc','br','bl','br','bl','br','bl','bc','tc','bl','bl','cl','tc','tr','bc','bc','tc','bl','tc','bc','tl',null];
 
 // STATEFUL popup placement — per-step manual position/size, persisted across navigation AND sessions.
 let popupOverrides = (()=>{ try{ return JSON.parse(localStorage.getItem('securai_popupPos_v1')) || {}; }catch(e){ return {}; } })();
@@ -1860,7 +1856,7 @@ function drawChart(){
     ctx.fillStyle='#fbbf24';ctx.beginPath();ctx.arc(bx,by,6,0,7);ctx.fill();
     const badge=document.getElementById('beBadge');
     badge.textContent='BREAK-EVEN: MONTH '+Math.ceil(be);
-    badge.style.left=(bx/W*100)+'%'; badge.style.top='18%'; badge.classList.add('show');
+    badge.style.left=(bx/W*100)+'%'; badge.style.top='68%'; badge.classList.add('show');
   }
   // legend
   ctx.font='12px Inter';
