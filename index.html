@@ -28,7 +28,12 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .stage{position:absolute;inset:0;z-index:2}
 .scene{position:absolute;inset:0;display:none;align-items:center;justify-content:center;
   opacity:0;transition:opacity .6s ease}
-.scene.show{display:flex;opacity:1}
+.scene.show{display:flex;opacity:1;animation:sceneIn .8s cubic-bezier(.2,.8,.2,1) both}
+@keyframes sceneIn{
+  0%{opacity:0;transform:scale(1.045);filter:blur(9px) brightness(1.15)}
+  55%{opacity:1}
+  100%{opacity:1;transform:scale(1);filter:blur(0) brightness(1)}
+}
 
 /* ===== HUD FRAME ===== */
 .hud{position:absolute;inset:0;z-index:20;pointer-events:none}
@@ -476,6 +481,85 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
   line-height:1.8;color:var(--muted);background:rgba(10,14,26,.5);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
 .perc-panel .h{color:var(--cyan);font-weight:700;margin-bottom:5px}
 
+/* ===== VISION — world-class 3D AI perception (Steps 17–18) ===== */
+.vision{position:absolute;inset:0;overflow:hidden;perspective:1300px;perspective-origin:50% 36%;
+  background:radial-gradient(ellipse at 50% 42%,#0d1f3a 0%,#0a1426 44%,#05080f 84%)}
+.vis-bigword{position:absolute;left:50%;top:26%;transform:translate(-50%,-50%);z-index:0;pointer-events:none;
+  font-size:clamp(4rem,17vw,14rem);font-weight:900;letter-spacing:-5px;white-space:nowrap;
+  color:transparent;-webkit-text-stroke:1.5px rgba(34,211,238,.08);text-stroke:1.5px rgba(34,211,238,.08)}
+.vis-floor{position:absolute;left:-35%;right:-35%;bottom:-8%;height:66%;z-index:1;transform:perspective(660px) rotateX(70deg);transform-origin:bottom;
+  background:repeating-linear-gradient(90deg,transparent,transparent 52px,rgba(34,211,238,.14) 52px,rgba(34,211,238,.14) 54px),
+             repeating-linear-gradient(0deg,transparent,transparent 52px,rgba(34,211,238,.10) 52px,rgba(34,211,238,.10) 54px);
+  -webkit-mask-image:radial-gradient(ellipse at 50% 100%,#000 28%,transparent 78%);
+  mask-image:radial-gradient(ellipse at 50% 100%,#000 28%,transparent 78%)}
+.vis-floor::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 100%,rgba(34,211,238,.16),transparent 56%)}
+.vis-shelf{position:absolute;z-index:2;border:1px solid rgba(34,211,238,.35);border-radius:4px;
+  background:linear-gradient(180deg,rgba(34,211,238,.07),transparent);box-shadow:inset 0 0 18px rgba(34,211,238,.12)}
+.vis-shelf .pbox{position:absolute;width:14px;height:11px;border:1px solid rgba(34,211,238,.5);border-radius:2px}
+.vis-shelf .plabel{position:absolute;top:-15px;left:-2px;font-family:'JetBrains Mono',monospace;font-size:.46rem;color:var(--cyan);white-space:nowrap}
+.vis-scan{position:absolute;left:0;right:0;height:130px;z-index:3;pointer-events:none;
+  background:linear-gradient(180deg,transparent,rgba(34,211,238,.10) 44%,rgba(34,211,238,.55) 50%,rgba(34,211,238,.10) 56%,transparent);
+  animation:visScan 3.4s ease-in-out infinite}
+@keyframes visScan{0%{top:-14%}100%{top:90%}}
+.vis-fig{position:absolute;z-index:5;transform:translateX(-50%) scale(var(--s,1));transform-origin:bottom center;
+  transition:left 2.6s linear, top 2.6s linear, transform .6s}
+.vis-fig .ground{position:absolute;bottom:-8px;left:50%;transform:translateX(-50%);width:62px;height:17px;border-radius:50%;
+  background:radial-gradient(ellipse,rgba(34,211,238,.55),transparent 70%);transition:.5s}
+.vis-fig .figbody{filter:drop-shadow(0 0 9px rgba(34,211,238,.75));transition:filter .5s}
+.vis-fig .bbox{position:absolute;inset:-12px -20px -6px;border:1.5px solid rgba(34,211,238,.55);border-radius:5px;transition:.4s}
+.vis-fig .bbox span{position:absolute;width:11px;height:11px;border:2px solid var(--cyan)}
+.vis-fig .bbox .tl{top:-2px;left:-2px;border-right:none;border-bottom:none}
+.vis-fig .bbox .tr{top:-2px;right:-2px;border-left:none;border-bottom:none}
+.vis-fig .bbox .bl{bottom:-2px;left:-2px;border-right:none;border-top:none}
+.vis-fig .bbox .br{bottom:-2px;right:-2px;border-left:none;border-top:none}
+.vis-fig .tag{position:absolute;top:-30px;left:50%;transform:translateX(-50%);white-space:nowrap;font-family:'JetBrains Mono',monospace;
+  font-size:.56rem;color:var(--cyan);background:rgba(10,14,26,.82);border:1px solid rgba(34,211,238,.45);padding:2px 8px;border-radius:6px;transition:.4s}
+.vis-fig.reid .bbox{border-style:dashed;opacity:.5} .vis-fig.reid .tag{opacity:.55}
+.vis-fig.suspect .bbox{border-color:rgba(248,113,113,.85);box-shadow:0 0 18px rgba(248,113,113,.45)}
+.vis-fig.suspect .bbox span{border-color:var(--red)}
+.vis-fig.suspect .tag{color:var(--red);border-color:rgba(248,113,113,.5)}
+.vis-fig.suspect .figbody{filter:drop-shadow(0 0 11px rgba(248,113,113,.8))}
+.vis-fig.suspect .ground{background:radial-gradient(ellipse,rgba(248,113,113,.55),transparent 70%)}
+.vis-gesture{position:absolute;top:-6px;left:50%;width:70px;height:70px;opacity:0;transition:.4s}
+.vis-fig.flag .vis-gesture{opacity:1}
+.vis-gesture path{fill:none;stroke:var(--amber);stroke-width:2;stroke-dasharray:60;stroke-dashoffset:60;
+  filter:drop-shadow(0 0 4px var(--amber))}
+.vis-fig.flag .vis-gesture path{animation:visDraw 1s ease forwards}
+@keyframes visDraw{to{stroke-dashoffset:0}}
+.vis-ring{position:absolute;z-index:4;width:96px;height:32px;border-radius:50%;border:2px solid rgba(248,113,113,.75);
+  box-shadow:0 0 22px rgba(248,113,113,.5),inset 0 0 14px rgba(248,113,113,.3);opacity:0;transition:.5s;transform:translateX(-50%)}
+.vis-ring.on{opacity:1;animation:ringP 1.5s ease-in-out infinite}
+@keyframes ringP{0%,100%{transform:translateX(-50%) scale(1);opacity:.7}50%{transform:translateX(-50%) scale(1.08);opacity:1}}
+.vis-alert{position:absolute;inset:0;z-index:6;pointer-events:none;opacity:0;transition:.6s;
+  background:radial-gradient(ellipse at 50% 56%,transparent 34%,rgba(216,78,78,.16) 82%)}
+.vis-alert.on{opacity:1;animation:visRed 2.1s ease-in-out infinite}
+@keyframes visRed{0%,100%{opacity:.65}50%{opacity:1}}
+.vis-alert-bar{position:absolute;top:18px;left:50%;transform:translate(-50%,-12px);z-index:8;opacity:0;transition:.45s;
+  background:rgba(248,113,113,.14);border:1px solid rgba(248,113,113,.55);color:var(--red);font-weight:800;font-size:.74rem;
+  letter-spacing:1px;padding:8px 18px;border-radius:12px;backdrop-filter:blur(8px)}
+.vis-alert-bar.on{opacity:1;transform:translate(-50%,0)}
+.vis-hud{position:absolute;top:20px;left:20px;z-index:7;width:236px;background:rgba(8,12,22,.62);backdrop-filter:blur(12px);
+  border:1px solid var(--line);border-radius:15px;padding:15px 16px;box-shadow:0 18px 40px rgba(0,0,0,.45)}
+.vis-hud .hh{font-size:.58rem;letter-spacing:1.5px;color:var(--cyan);font-weight:800;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+.vis-hud .hh .dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 1.4s infinite}
+.vis-mod{margin-bottom:11px}
+.vis-mod .mr{display:flex;justify-content:space-between;font-size:.58rem;font-weight:700;margin-bottom:4px}
+.vis-mod .mr .v{font-family:'JetBrains Mono',monospace;color:var(--cyan)}
+.vis-mod .bar{height:5px;border-radius:99px;background:rgba(255,255,255,.1);overflow:hidden}
+.vis-mod .bar i{display:block;height:100%;width:0;background:var(--grad);border-radius:99px;transition:width 1.1s ease}
+.vis-cascade{position:absolute;right:20px;bottom:20px;z-index:7;width:290px;font-family:'JetBrains Mono',monospace;font-size:.6rem;line-height:1.6;
+  background:rgba(8,12,22,.62);backdrop-filter:blur(12px);border:1px solid rgba(248,113,113,.3);border-radius:13px;padding:14px 15px;
+  opacity:0;transform:translateY(12px);transition:.45s}
+.vis-cascade.on{opacity:1;transform:none}
+.vis-cascade .ct{color:var(--red);font-weight:800;margin-bottom:9px;letter-spacing:1px;font-family:'Inter',sans-serif;font-size:.66rem}
+.vis-cascade .cs{opacity:.3;transition:.4s;display:flex;gap:8px;padding:4px 0}
+.vis-cascade .cs.done{opacity:1;color:var(--green)}
+.vis-cascade .cs .ix{color:var(--muted)}
+.vis-cascade .resolved{margin-top:9px;padding-top:9px;border-top:1px solid var(--line);color:var(--green);font-weight:800;
+  font-family:'Inter',sans-serif;font-size:.66rem;opacity:0;transition:.5s}
+.vis-cascade .resolved.on{opacity:1}
+.vis-vignette{position:absolute;inset:0;z-index:9;pointer-events:none;box-shadow:inset 0 0 230px rgba(5,8,15,.85)}
+
 /* ===== WIFI GRID ===== */
 .wifi-grid{position:absolute;inset:8% 6%;display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(4,1fr);gap:8px}
 .sector{border:1px solid rgba(139,92,246,.2);border-radius:7px;position:relative;transition:.4s;
@@ -725,9 +809,19 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .endcard .credits b{color:var(--text)}
 .endcard .track{margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:2px;color:var(--cyan)}
 
-.flash{position:absolute;inset:0;background:#fff;z-index:30;opacity:0;pointer-events:none}
-.flash.go{animation:flashfade .5s}
-@keyframes flashfade{0%{opacity:.0}30%{opacity:.5}100%{opacity:0}}
+/* cinematic, eye-comfortable slide transition (deep navy veil + cyan light sweep) */
+.flash{position:absolute;inset:0;z-index:30;opacity:0;pointer-events:none;
+  background:
+    linear-gradient(100deg, transparent 36%, rgba(34,211,238,.30) 49%, rgba(139,92,246,.18) 51%, transparent 64%),
+    radial-gradient(ellipse at 50% 50%, rgba(15,26,46,.94), rgba(6,9,16,.98));
+  background-size:320% 100%, 100% 100%; background-position:130% 0, 0 0}
+.flash.go{animation:xtrans .72s cubic-bezier(.55,0,.25,1)}
+@keyframes xtrans{
+  0%{opacity:0;background-position:130% 0,0 0}
+  26%{opacity:1}
+  60%{opacity:.9}
+  100%{opacity:0;background-position:-50% 0,0 0}
+}
 </style>
 </head>
 <body>
@@ -823,7 +917,7 @@ function actFor(i){ return ACTS.find(a=>i>=a.from&&i<=a.to); }
 
 // Per-step popup anchor — curated so the card never overlaps that scene's content.
 // Indexed by step number (0 idle & 26 endcard have no card).
-const POPUP_POS=[null,'bc','tc','cr','bc','tc','br','bl','br','bl','br','bl','bc','tc','bc','tc','bc','tc','bc','tc','bc','tc','bl','tc','bc','tc',null];
+const POPUP_POS=[null,'bc','tc','cr','bc','tc','br','bl','br','bl','br','bl','bc','tc','bc','tc','bc','tc','tr','tc','bc','tc','bl','tc','bc','tc',null];
 
 // STATEFUL popup placement — per-step manual position/size, persisted across navigation AND sessions.
 let popupOverrides = (()=>{ try{ return JSON.parse(localStorage.getItem('securai_popupPos_v1')) || {}; }catch(e){ return {}; } })();
@@ -877,7 +971,7 @@ function render(){
 }
 
 function next(){ if(idx<STEPS.length-1){ idx++; flash(); render(); } }
-function prev(){ if(idx>0){ idx--; render(); } }
+function prev(){ if(idx>0){ idx--; flash(); render(); } }
 function replay(){ render(); }
 
 function flash(){ const f=document.getElementById('flash'); f.classList.remove('go'); void f.offsetWidth; f.classList.add('go'); }
@@ -1320,69 +1414,85 @@ function sceneEngine(){
 }
 function animEngine(){ const c=document.querySelector('.eng-charge'); if(c){ c.classList.remove('go'); void c.offsetWidth; c.classList.add('go'); } }
 
-/* ---- XRAY ---- */
-function sceneXray(sub){
-  return `<div class="xray" id="xrayBox">
-    <svg viewBox="0 0 900 560">
-      <rect x="30" y="30" width="840" height="500" rx="16" fill="none" stroke="rgba(34,211,238,.25)"/>
-      ${[0,1,2].map(r=>`<rect x="${230+r*180}" y="150" width="70" height="260" rx="6" fill="none" stroke="rgba(34,211,238,.3)"/>`).join('')}
-      ${[200,450,700].map(x=>`<circle cx="${x}" cy="70" r="8" fill="none" stroke="#22d3ee"/>`).join('')}
-    </svg>
-    <div class="perc-panel" id="percPanel" style="display:none">
-      <div class="h">PERCEPTION STACK — EDGE AI</div>
-      <div>├ OBJECT DETECTION ... YOLO</div>
-      <div>├ POSE ESTIMATION .... 17-kp</div>
-      <div>├ PERSON RE-ID ....... on</div>
-      <div>└ SENSOR FUSION ...... cam+load+wifi</div>
-    </div>
-    <div class="person" id="p07" style="left:30%;top:55%">
-      <div class="box"></div><div class="pid">P-07 · Re-ID 0.94</div>${skeleton()}
-    </div>
-    <div class="person suspect" id="p11" style="left:62%;top:50%;display:none">
-      <div class="box"></div><div class="pid">P-11 · ⚠</div>${skeleton()}
-    </div>
-    <div class="alert-overlay" id="alertOv"></div>
-    <div class="alert-cascade" id="cascade" style="display:none">
-      <div data-s="0">1. ITEM AUTO-ATTRIBUTED → BASKET P-11</div>
-      <div data-s="1">2. ENCRYPTED EVENT LOG SAVED ✓</div>
-      <div data-s="2">3. SILENT STAFF NOTIFICATION — NO ALARM</div>
-      <div data-s="3">4. GATE FLAG: BASKET REVIEW</div>
-    </div>
-  </div>`;
-}
-function skeleton(){
-  return `<svg width="40" height="70" viewBox="0 0 40 70" style="overflow:visible">
-    <circle cx="20" cy="8" r="5" fill="rgba(34,211,238,.3)" stroke="#22d3ee"/>
-    <line x1="20" y1="13" x2="20" y2="38" stroke="#22d3ee" stroke-width="1.5"/>
-    <line x1="20" y1="20" x2="6" y2="32" stroke="#22d3ee" stroke-width="1.5"/>
-    <line x1="20" y1="20" x2="34" y2="32" stroke="#22d3ee" stroke-width="1.5"/>
-    <line x1="20" y1="38" x2="10" y2="62" stroke="#22d3ee" stroke-width="1.5"/>
-    <line x1="20" y1="38" x2="30" y2="62" stroke="#22d3ee" stroke-width="1.5"/>
-    ${[[20,8],[20,38],[6,32],[34,32],[10,62],[30,62]].map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="2.5" fill="#22d3ee"/>`).join('')}
+/* ---- VISION (world-class 3D AI perception) ---- */
+function visSkeleton(){
+  return `<svg width="48" height="94" viewBox="0 0 48 94" style="overflow:visible">
+    <circle cx="24" cy="11" r="6.5" fill="currentColor" fill-opacity=".22" stroke="currentColor" stroke-width="1.6"/>
+    <line x1="24" y1="17.5" x2="24" y2="50" stroke="currentColor" stroke-width="1.8"/>
+    <line x1="24" y1="24" x2="9" y2="40" stroke="currentColor" stroke-width="1.8"/>
+    <line x1="9" y1="40" x2="7" y2="58" stroke="currentColor" stroke-width="1.8"/>
+    <line x1="24" y1="24" x2="39" y2="40" stroke="currentColor" stroke-width="1.8"/>
+    <line x1="39" y1="40" x2="41" y2="58" stroke="currentColor" stroke-width="1.8"/>
+    <line x1="24" y1="50" x2="14" y2="72" stroke="currentColor" stroke-width="1.8"/>
+    <line x1="14" y1="72" x2="13" y2="92" stroke="currentColor" stroke-width="1.8"/>
+    <line x1="24" y1="50" x2="34" y2="72" stroke="currentColor" stroke-width="1.8"/>
+    <line x1="34" y1="72" x2="35" y2="92" stroke="currentColor" stroke-width="1.8"/>
+    ${[[24,11],[24,24],[9,40],[7,58],[39,40],[41,58],[24,50],[14,72],[13,92],[34,72],[35,92]].map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="2.6" fill="currentColor"/>`).join('')}
   </svg>`;
 }
+function visFigure(id,cls,tag,left,top,s,color){
+  return `<div class="vis-fig ${cls}" id="${id}" style="left:${left}%;top:${top}%;--s:${s}">
+    <div class="ground"></div>
+    <div class="figbody" style="color:${color}">${visSkeleton()}</div>
+    <div class="bbox"><span class="tl"></span><span class="tr"></span><span class="bl"></span><span class="br"></span></div>
+    <div class="tag">${tag}</div>
+    <svg class="vis-gesture" viewBox="0 0 70 70"><path d="M12 52 Q28 4 58 24"/></svg>
+  </div>`;
+}
+function sceneXray(sub){
+  const alert = sub==='alert';
+  const mods=[['Object Detection · YOLO','0.97',97],['Pose Estimation · 17-kp','LIVE',88],['Person Re-ID','0.94',94],['Sensor Fusion','cam+load+wifi',99]];
+  const hud=`<div class="vis-hud"><div class="hh"><span>PERCEPTION STACK · EDGE AI</span><span class="dot"></span></div>
+    ${mods.map(m=>`<div class="vis-mod"><div class="mr"><span>${m[0]}</span><span class="v">${m[1]}</span></div><div class="bar"><i data-w="${m[2]}"></i></div></div>`).join('')}</div>`;
+  const shelf=(style,lbl)=>`<div class="vis-shelf" style="${style}">
+    ${[[14,18],[44,18],[74,18],[14,52],[44,52],[74,52]].map(p=>`<span class="pbox" style="left:${p[0]}px;top:${p[1]}px"></span>`).join('')}
+    <span class="plabel">${lbl}</span></div>`;
+  const cascade = alert ? `<div class="vis-cascade" id="visCascade">
+    <div class="ct">⚠ ALERT MODE · VERIFY, DON'T ACCUSE</div>
+    <div class="cs" data-s="0"><span class="ix">1.</span> ITEM AUTO-ATTRIBUTED → BASKET P-11</div>
+    <div class="cs" data-s="1"><span class="ix">2.</span> ENCRYPTED EVENT LOG SAVED ✓</div>
+    <div class="cs" data-s="2"><span class="ix">3.</span> SILENT STAFF NOTIFICATION — NO ALARM</div>
+    <div class="cs" data-s="3"><span class="ix">4.</span> GATE FLAG: BASKET REVIEW AT EXIT</div>
+    <div class="resolved" id="visResolved">RESOLVED · CHARGED AT GATE · NO CONFRONTATION · LOSS → 0</div></div>` : '';
+  return `<div class="vision" id="visScene">
+    <div class="vis-bigword">${alert?'SECURITY':'PERCEPTION'}</div>
+    <div class="vis-floor"></div>
+    ${shelf('left:16%;top:38%;width:104px;height:80px','Arabica ✓ 0.96')}
+    ${shelf('right:15%;top:36%;width:104px;height:80px','Juice ✓ 0.95')}
+    <div class="vis-scan"></div>
+    ${hud}
+    ${visFigure('fig07','', 'P-07 · Re-ID 0.94', 36, 62, 1, '#22d3ee')}
+    ${alert ? visFigure('fig11','suspect', 'P-11 · TRACKING', 62, 58, .92, '#f87171') : ''}
+    <div class="vis-ring" id="visRing" style="left:62%;top:74%"></div>
+    <div class="vis-alert" id="visAlert"></div>
+    <div class="vis-alert-bar" id="visAlertBar">⚠ ANOMALY DETECTED · P-11 · CONCEAL-TO-POCKET 0.89</div>
+    ${cascade}
+    <div class="vis-vignette"></div>
+  </div>`;
+}
 function animXray(sub){
-  const p07=document.getElementById('p07'), p11=document.getElementById('p11'),
-    ov=document.getElementById('alertOv'), casc=document.getElementById('cascade'),
-    panel=document.getElementById('percPanel'), box=document.getElementById('xrayBox');
-  if(sub==='intro'){
-    // walk p07 + occlusion re-id demo
-    setTimeout(()=>{p07.style.left='48%';},300);
-    setTimeout(()=>{p07.classList.add('reid');},2400);
-    setTimeout(()=>{p07.classList.remove('reid');p07.style.left='66%';},3200);
-  }
+  if(!document.getElementById('visScene')) return;
+  setTimeout(()=>document.querySelectorAll('.vis-mod .bar i').forEach(b=>b.style.width=b.dataset.w+'%'), 300);
+  const f07=document.getElementById('fig07');
   if(sub==='perception'){
-    panel.style.display='block';
-    setTimeout(()=>{p07.style.left='40%';},300);
-    setTimeout(()=>{p07.classList.add('reid');},2000);
-    setTimeout(()=>{p07.classList.remove('reid');},2800);
+    // tracking + Re-ID occlusion recovery
+    setTimeout(()=>{ if(f07) f07.style.left='44%'; },400);
+    setTimeout(()=>{ if(f07){ f07.classList.add('reid'); const t=f07.querySelector('.tag'); if(t) t.textContent='P-07 · RE-ID…'; } },2300);
+    setTimeout(()=>{ if(f07){ f07.classList.remove('reid'); const t=f07.querySelector('.tag'); if(t) t.textContent='P-07 · RE-ID ✓ 0.94'; f07.style.left='58%'; } },3100);
   }
   if(sub==='alert'){
-    panel.style.display='block'; p11.style.display='block'; casc.style.display='block';
-    setTimeout(()=>{ov.classList.add('on'); if(box) box.style.filter='hue-rotate(-25deg) saturate(1.2)';},600);
-    const lines=casc.querySelectorAll('div');
-    lines.forEach((l,i)=>setTimeout(()=>l.classList.add('done'), 1000+i*700));
-    setTimeout(()=>{ov.classList.remove('on'); if(box) box.style.filter='none';}, 1000+lines.length*700+400);
+    const f11=document.getElementById('fig11'), alert=document.getElementById('visAlert'),
+      bar=document.getElementById('visAlertBar'), ring=document.getElementById('visRing'),
+      casc=document.getElementById('visCascade');
+    setTimeout(()=>{ if(f11) f11.classList.add('flag'); },700);                 // gesture flagged (amber)
+    setTimeout(()=>{ bar&&bar.classList.add('on'); alert&&alert.classList.add('on'); ring&&ring.classList.add('on'); },1500);
+    setTimeout(()=>{ casc&&casc.classList.add('on'); },1900);
+    const lines=casc?casc.querySelectorAll('.cs'):[];
+    lines.forEach((l,i)=>setTimeout(()=>l.classList.add('done'), 2300+i*750));
+    const endT=2300+lines.length*750;
+    setTimeout(()=>{ const r=document.getElementById('visResolved'); if(r) r.classList.add('on'); },endT);
+    // self-heal: alert fades, system returns to calm cyan tracking
+    setTimeout(()=>{ alert&&alert.classList.remove('on'); bar&&bar.classList.remove('on'); ring&&ring.classList.remove('on'); },endT+1400);
   }
 }
 
